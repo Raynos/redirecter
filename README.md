@@ -11,6 +11,8 @@ Easy redirection
         if (url === "/wrong") {
             // redirect them to /right but also tell them you are a teapot
             redirect(req, res, "/right", 418)
+        } else if (url === "/right") {
+            res.end("doing it right")
         }
     }).listen(8080)
 
