@@ -17,8 +17,8 @@
     "email": "raynos2@gmail.com"
   },
   "dependencies": {
-    "routil-mediatypes": "0.0.3",
-    "routil-send": "0.0.1"
+    "send-data": "~0.1.0",
+    "media-types": "~0.1.0"
   },
   "devDependencies": {
     "tap": "0.2.5",

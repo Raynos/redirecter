@@ -9,7 +9,10 @@ function handleRequest(req, res) {
         redirect(req, res, "/foo")
     } else if (req.url.match(/^\/status/)) {
         var status = parseInt(req.url.substr(7), 10)
-        redirect(req, res, "/foo", status)
+        redirect(req, res, {
+            target: "/foo"
+            , statusCode: status
+        })
     } else {
         res.end("foo")
     }

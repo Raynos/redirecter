@@ -4,17 +4,24 @@ Easy redirection
 
 ## Example
 
-    var redirect = require("redirecter")
-        , http = require("http")
+```
+var redirect = require("redirecter")
+    , http = require("http")
 
-    http.createServer(function (req, res) {
-        if (url === "/wrong") {
-            // redirect them to /right but also tell them you are a teapot
-            redirect(req, res, "/right", 418)
-        } else if (url === "/right") {
-            res.end("doing it right")
-        }
-    }).listen(8080)
+http.createServer(function handleRequest(req, res) {
+    if (req.url === "/redir") {
+        redirect(req, res, "/foo")
+    } else if (req.url.match(/^\/status/)) {
+        var status = parseInt(req.url.substr(7), 10)
+        redirect(req, res, {
+            target: "/foo"
+            , statusCode: status
+        })
+    } else {
+        res.end("foo")
+    }
+}).listen(8080)
+```
 
 ## Installation
 

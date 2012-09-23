@@ -1,33 +1,43 @@
-var mediaTypes = require("routil-mediatypes")()
-    , send = require("routil-send")
-    , sendJson = send.sendJson
-    , sendHtml = send.sendHtml
+var mediaTypes = require("media-types")
+    , send = require("send-data")
+    , sendJson = send.json
+    , sendHtml = send.html
 
 module.exports = redirect
 
-function redirect(req, res, target, statusCode) {
-    statusCode = statusCode || 302
+function redirect(req, res, target) {
+    var statusCode = 302
+    if (typeof target === "object") {
+        statusCode = target.statusCode || 302
+        target = target.target
+    }
+
     res.setHeader('location', target)
 
     mediaTypes(req, res, {
-        "application/json": jsonRedirectHandler
+        "application/json": sendJson
         , "default": defaultRedirectHandler
-    })(res, target, statusCode)
+    })(req, res, {
+        data: {
+            redirect: target
+            , statusCode: statusCode
+        }
+        , statusCode: statusCode
+    })
 }
 
-function jsonRedirectHandler(res, target, statusCode) {
-    sendJson(res, {
-        redirect: target,
-        statusCode: statusCode
-    }, statusCode)
-}
+function defaultRedirectHandler(req, res, options) {
+    var statusCode = options.statusCode
+        , target = options.data.redirect
 
-function defaultRedirectHandler(res, target, statusCode) {
     var html =  '<html><body><h1>Moved'
     if (statusCode === 302) {
         html += ' Permanently'
     }
     html += '</h1><a href="' + target + '">' + target + '</a>'
 
-    sendHtml(res, html, statusCode)
+    sendHtml(req, res, {
+        data: html
+        , statusCode: statusCode
+    })
 }
