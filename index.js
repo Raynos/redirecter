@@ -1,7 +1,11 @@
 var mediaTypes = require("media-types")
-    , send = require("send-data")
-    , sendJson = send.json
-    , sendHtml = send.html
+var sendJson = require("send-data/json")
+var sendHtml = require("send-data/html")
+
+var handler = mediaTypes({
+    "application/json": sendJson,
+    "default": defaultRedirectHandler
+})
 
 module.exports = redirect
 
@@ -12,32 +16,34 @@ function redirect(req, res, target) {
         target = target.target
     }
 
-    res.setHeader('location', target)
+    if (target === "back") {
+        // console.log("req", req.headers)
+        target = req.headers.referrer || "/"
+    }
 
-    mediaTypes(req, res, {
-        "application/json": sendJson
-        , "default": defaultRedirectHandler
-    })(req, res, {
-        data: {
-            redirect: target
-            , statusCode: statusCode
-        }
-        , statusCode: statusCode
+    res.setHeader("location", target)
+
+    handler(req, res, {
+        body: {
+            redirect: target,
+            statusCode: statusCode
+        },
+        statusCode: statusCode
     })
 }
 
 function defaultRedirectHandler(req, res, options) {
     var statusCode = options.statusCode
-        , target = options.data.redirect
+    var target = options.body.redirect
 
-    var html =  '<html><body><h1>Moved'
+    var html =  "<html><body><h1>Moved"
     if (statusCode === 302) {
-        html += ' Permanently'
+        html += " Permanently"
     }
-    html += '</h1><a href="' + target + '">' + target + '</a>'
+    html += "</h1><a href='" + target + "'>" + target + "</a>"
 
     sendHtml(req, res, {
-        data: html
-        , statusCode: statusCode
+        body: html,
+        statusCode: statusCode
     })
 }

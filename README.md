@@ -4,9 +4,9 @@ Easy redirection
 
 ## Example
 
-```
+```js
 var redirect = require("redirecter")
-    , http = require("http")
+var http = require("http")
 
 http.createServer(function handleRequest(req, res) {
     if (req.url === "/redir") {
@@ -17,6 +17,9 @@ http.createServer(function handleRequest(req, res) {
             target: "/foo"
             , statusCode: status
         })
+    } else if (req.url === "/back") {
+        // shorthand for redirecter(req, res, req.getHeader("Referrer"))
+        redirecter(req, res, "back")
     } else {
         res.end("foo")
     }

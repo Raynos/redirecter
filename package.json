@@ -17,12 +17,13 @@
     "email": "raynos2@gmail.com"
   },
   "dependencies": {
-    "send-data": "~0.1.0",
-    "media-types": "~0.1.0"
+    "send-data": "~3.1.2",
+    "media-types": "~1.0.3",
+    "request": "~2.27.0"
   },
   "devDependencies": {
-    "tap": "0.2.5",
-    "test-server": "0.0.1"
+    "test-server": "~0.2.1",
+    "tape": "~2.3.0"
   },
   "licenses": [
     {
@@ -31,6 +32,6 @@
     }
   ],
   "scripts": {
-    "test": "make node-test"
+    "test": "node test/integration.js"
   }
 }
