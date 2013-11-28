@@ -18,8 +18,7 @@
   },
   "dependencies": {
     "send-data": "~3.1.2",
-    "media-types": "~1.0.3",
-    "request": "~2.27.0"
+    "media-types": "~1.0.3"
   },
   "devDependencies": {
     "test-server": "~0.2.1",
